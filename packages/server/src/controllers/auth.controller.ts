@@ -144,7 +144,7 @@ export const refreshAccessTokenHandler = async ({ ctx }: { ctx: Context }) => {
     }
 
     // Check if the user exist
-    const user = await findUniqueUser({ id: JSON.parse(session).id }, {});
+    const user = await findUniqueUser({ id: JSON.parse(session).id });
 
     if (!user) {
       throw new TRPCError({ code: 'FORBIDDEN', message });

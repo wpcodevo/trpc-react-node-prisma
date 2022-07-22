@@ -3,6 +3,7 @@ import { QueryClientProvider, QueryClient } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { getFetch } from '@trpc/client';
 import { trpc } from './utils/trpc';
+import './global.css';
 
 function AppContent() {
   const hello = trpc.useQuery(['hello']);

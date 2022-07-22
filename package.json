@@ -1,5 +1,5 @@
 {
-  "name": "trpc-node-react",
+  "name": "trpc-prisma-react",
   "private": "true",
   "scripts": {
     "start": "concurrently \"wsrun --parallel start\""
@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "devDependencies": {
-    "concurrently": "^7.2.2",
+    "concurrently": "^7.3.0",
     "wsrun": "^5.2.4"
   }
 }

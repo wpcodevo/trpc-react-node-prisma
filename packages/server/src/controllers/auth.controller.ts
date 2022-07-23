@@ -100,6 +100,7 @@ export const loginHandler = async ({
       access_token,
     };
   } catch (err: any) {
+    console.log(err);
     throw err;
   }
 };

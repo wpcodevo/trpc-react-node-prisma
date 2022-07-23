@@ -60,7 +60,7 @@ export const deserializeUser = async ({
     return {
       req,
       res,
-      user: { ...user, id: user.id },
+      user,
     };
   } catch (err: any) {
     throw new TRPCError({

@@ -12,14 +12,15 @@ import {
 } from '../services/user.service';
 import redisClient from '../utils/connectRedis';
 import { signJwt, verifyJwt } from '../utils/jwt';
+// [...] Imports
 
+// [...] Cookie Options
 const cookieOptions: CookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
   sameSite: 'lax',
 };
 
-// Cookie options
 const accessTokenCookieOptions: CookieOptions = {
   ...cookieOptions,
   expires: new Date(Date.now() + customConfig.accessTokenExpiresIn * 60 * 1000),
@@ -32,10 +33,7 @@ const refreshTokenCookieOptions: CookieOptions = {
   ),
 };
 
-// Only set secure to true in production
-if (process.env.NODE_ENV === 'production')
-  accessTokenCookieOptions.secure = true;
-
+// [...] Register User Handler
 export const registerHandler = async ({
   input,
 }: {
@@ -68,6 +66,7 @@ export const registerHandler = async ({
   }
 };
 
+// [...] Login User Handler
 export const loginHandler = async ({
   input,
   ctx,
@@ -108,15 +107,7 @@ export const loginHandler = async ({
   }
 };
 
-// Refresh tokens
-const logout = ({ ctx }: { ctx: Context }) => {
-  ctx.res.cookie('access_token', '', { maxAge: -1 });
-  ctx.res.cookie('refresh_token', '', { maxAge: -1 });
-  ctx.res.cookie('logged_in', '', {
-    maxAge: -1,
-  });
-};
-
+// [...] Refresh Access Token Handler
 export const refreshAccessTokenHandler = async ({ ctx }: { ctx: Context }) => {
   try {
     // Get the refresh token from cookie
@@ -170,6 +161,15 @@ export const refreshAccessTokenHandler = async ({ ctx }: { ctx: Context }) => {
   } catch (err: any) {
     throw err;
   }
+};
+
+// [...] Logout User Handler
+const logout = ({ ctx }: { ctx: Context }) => {
+  ctx.res.cookie('access_token', '', { maxAge: -1 });
+  ctx.res.cookie('refresh_token', '', { maxAge: -1 });
+  ctx.res.cookie('logged_in', '', {
+    maxAge: -1,
+  });
 };
 
 export const logoutHandler = async ({ ctx }: { ctx: Context }) => {

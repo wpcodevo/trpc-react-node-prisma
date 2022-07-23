@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import bcrypt from 'bcryptjs';
 import { CookieOptions } from 'express';
@@ -40,7 +41,7 @@ export const registerHandler = async ({
   try {
     const hashedPassword = await bcrypt.hash(input.password, 12);
     const user = await createUser({
-      email: input.email,
+      email: input.email.toLowerCase(),
       name: input.name,
       password: hashedPassword,
       photo: input.photo,
@@ -54,11 +55,13 @@ export const registerHandler = async ({
       },
     };
   } catch (err: any) {
-    if (err.code === 11000) {
-      throw new TRPCError({
-        code: 'CONFLICT',
-        message: 'Email already exists',
-      });
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === 'P2002') {
+        throw new TRPCError({
+          code: 'CONFLICT',
+          message: 'Email already exists',
+        });
+      }
     }
     throw err;
   }
@@ -73,7 +76,7 @@ export const loginHandler = async ({
 }) => {
   try {
     // Get the user from the collection
-    const user = await findUser({ email: input.email });
+    const user = await findUser({ email: input.email.toLowerCase() });
 
     // Check if user exist and password is correct
     if (!user || !(await bcrypt.compare(input.password, user.password))) {

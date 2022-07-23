@@ -1,5 +1,5 @@
 import { TRPCError } from '@trpc/server';
-import type { Context } from '../createContext';
+import type { Context } from '../app';
 
 export const getMeHandler = ({ ctx }: { ctx: Context }) => {
   try {

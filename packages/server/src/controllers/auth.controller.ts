@@ -32,10 +32,6 @@ const refreshTokenCookieOptions: CookieOptions = {
   ),
 };
 
-// Only set secure to true in production
-if (process.env.NODE_ENV === 'production')
-  accessTokenCookieOptions.secure = true;
-
 export const registerHandler = async ({
   input,
 }: {
@@ -109,14 +105,6 @@ export const loginHandler = async ({
 };
 
 // Refresh tokens
-const logout = ({ ctx }: { ctx: Context }) => {
-  ctx.res.cookie('access_token', '', { maxAge: -1 });
-  ctx.res.cookie('refresh_token', '', { maxAge: -1 });
-  ctx.res.cookie('logged_in', '', {
-    maxAge: -1,
-  });
-};
-
 export const refreshAccessTokenHandler = async ({ ctx }: { ctx: Context }) => {
   try {
     // Get the refresh token from cookie
@@ -173,6 +161,13 @@ export const refreshAccessTokenHandler = async ({ ctx }: { ctx: Context }) => {
   }
 };
 
+const logout = ({ ctx }: { ctx: Context }) => {
+  ctx.res.cookie('access_token', '', { maxAge: -1 });
+  ctx.res.cookie('refresh_token', '', { maxAge: -1 });
+  ctx.res.cookie('logged_in', '', {
+    maxAge: -1,
+  });
+};
 export const logoutHandler = async ({ ctx }: { ctx: Context }) => {
   try {
     const user = ctx.user;

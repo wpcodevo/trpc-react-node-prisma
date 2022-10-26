@@ -1,8 +1,9 @@
-import { TRPCError } from '@trpc/server';
-import { findUniqueUser } from '../services/user.service';
-import { Request, Response } from 'express';
-import redisClient from '../utils/connectRedis';
-import { verifyJwt } from '../utils/jwt';
+import { TRPCError } from "@trpc/server";
+import { findUniqueUser } from "../services/user.service";
+import { Request, Response } from "express";
+import redisClient from "../utils/connectRedis";
+import { verifyJwt } from "../utils/jwt";
+import { User } from "@prisma/client";
 
 export const deserializeUser = async ({
   req,
@@ -16,9 +17,9 @@ export const deserializeUser = async ({
     let access_token;
     if (
       req.headers.authorization &&
-      req.headers.authorization.startsWith('Bearer')
+      req.headers.authorization.startsWith("Bearer")
     ) {
-      access_token = req.headers.authorization.split(' ')[1];
+      access_token = req.headers.authorization.split(" ")[1];
     } else if (req.cookies?.access_token) {
       access_token = req.cookies.access_token;
     }
@@ -36,7 +37,7 @@ export const deserializeUser = async ({
     // Validate Access Token
     const decoded = verifyJwt<{ sub: string }>(
       access_token,
-      'accessTokenPublicKey'
+      "accessTokenPublicKey"
     );
 
     if (!decoded) {
@@ -60,11 +61,11 @@ export const deserializeUser = async ({
     return {
       req,
       res,
-      user,
+      user: { ...user, id: user.id } as User,
     };
   } catch (err: any) {
     throw new TRPCError({
-      code: 'INTERNAL_SERVER_ERROR',
+      code: "INTERNAL_SERVER_ERROR",
       message: err.message,
     });
   }

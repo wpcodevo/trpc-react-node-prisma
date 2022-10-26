@@ -1,5 +1,5 @@
-import path from 'path';
-require('dotenv').config({ path: path.join(__dirname, '../../.env') });
+import path from "path";
+require("dotenv").config({ path: path.join(__dirname, "../../.env") });
 
 const customConfig: {
   port: number;
@@ -17,7 +17,7 @@ const customConfig: {
   accessTokenExpiresIn: 15,
   refreshTokenExpiresIn: 60,
   redisCacheExpiresIn: 60,
-  origin: 'http://localhost:3000',
+  origin: "http://localhost:3000",
 
   dbUri: process.env.DATABASE_URL as string,
   accessTokenPrivateKey: process.env.ACCESS_TOKEN_PRIVATE_KEY as string,

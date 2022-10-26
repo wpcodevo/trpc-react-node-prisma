@@ -3,9 +3,9 @@ export interface IUser {
   email: string;
   role: string;
   photo: string;
-  _id: string;
+  _id?: string;
   id: string;
   createdAt: string;
   updatedAt: string;
-  __v: number;
+  __v?: number;
 }

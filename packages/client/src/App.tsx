@@ -1,17 +1,17 @@
-import { useState } from 'react';
-import { QueryClientProvider, QueryClient } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
-import { getFetch } from '@trpc/client';
-import { trpc } from './utils/trpc';
-import { loggerLink } from '@trpc/client/links/loggerLink';
-import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
-import { useRoutes } from 'react-router-dom';
-import routes from './router';
-import { BrowserRouter as Router } from 'react-router-dom';
-import AuthMiddleware from './middleware/AuthMiddleware';
-import { ToastContainer } from 'react-toastify';
-import './global.css';
-import 'react-toastify/dist/ReactToastify.css';
+import { useState } from "react";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { getFetch } from "@trpc/client";
+import { trpc } from "./utils/trpc";
+import { loggerLink } from "@trpc/client/links/loggerLink";
+import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
+import { useRoutes } from "react-router-dom";
+import routes from "./router";
+import { BrowserRouter as Router } from "react-router-dom";
+import AuthMiddleware from "./middleware/AuthMiddleware";
+import { ToastContainer } from "react-toastify";
+import "./global.css";
+import "react-toastify/dist/ReactToastify.css";
 
 function AppContent() {
   const content = useRoutes(routes);
@@ -29,24 +29,22 @@ function App() {
         },
       })
   );
-  const url = 'http://localhost:8000/api/trpc';
-  const links = [
-    loggerLink(),
-    httpBatchLink({
-      maxBatchSize: 10,
-      url,
-    }),
-  ];
+
   const [trpcClient] = useState(() =>
     trpc.createClient({
-      links,
-      fetch: async (input, init?) => {
-        const fetch = getFetch();
-        return fetch(input, {
-          ...init,
-          credentials: 'include',
-        });
-      },
+      links: [
+        loggerLink(),
+        httpBatchLink({
+          url: "http://localhost:8000/api/trpc",
+          fetch: async (input, init?) => {
+            const fetch = getFetch();
+            return fetch(input, {
+              ...init,
+              credentials: "include",
+            });
+          },
+        }),
+      ],
     })
   );
   return (
